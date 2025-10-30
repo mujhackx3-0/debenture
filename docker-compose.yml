@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  esoteric-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: esoteric-backend
+    env_file:
+      - .env
+    environment:
+      - GROQ_API_KEY=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
+      - GROQ_MODEL_NAME=mixtral-8x7b-32768
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+      - HOST=0.0.0.0
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - loan_sales_rag_data:/app/loan_sales_rag.db
+      - chat_memory_data:/app/chat_memory_loan_sales.db
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - esoteric-network
+
+volumes:
+  loan_sales_rag_data:
+    driver: local
+  chat_memory_data:
+    driver: local
+
+networks:
+  esoteric-network:
+    driver: bridge
+
