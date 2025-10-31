@@ -1,4 +1,4 @@
---- START OF FILE finlensproto_loan_sales.py ---
+
 
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -424,4 +424,3 @@ def start_loan_sales_session():
 if __name__ == "__main__":
     start_loan_sales_session()
 
---- END OF FILE finlensproto_loan_sales.py ---
